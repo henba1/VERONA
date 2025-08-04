@@ -27,7 +27,12 @@ For formal verification capabilities, please check back for the updated ada-auto
   - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
   - [Installation](#installation)
-    - [Installation Options](#installation-options)
+    - [System Requirements: HPC Cluster Setup (Recommended)](#system-requirements-hpc-cluster-setup-recommended)
+    - [Step-by-Step Installation Guide](#step-by-step-installation-guide)
+      - [1. Environment Setup](#1-environment-setup)
+      - [2. Create Virtual Environment](#2-create-virtual-environment)
+      - [3. Install ada-verona](#3-install-ada-verona)
+      - [4. Optional: Install Plugins](#4-optional-install-plugins)
     - [Installation Variants Explained](#installation-variants-explained)
   - [Documentation](#documentation)
   - [Getting Started: Guide and Example Scripts](#getting-started-guide-and-example-scripts)
@@ -67,9 +72,56 @@ This package was created and is maintained by members the [ADA Research Group](h
 
 ## Installation
 
-### Installation Options
+**Important:** This package was tested only on Python version 3.10 and we cannot guarantee it working on any other Python version.
 
-ADA-VERONA offers several installation options to meet different needs:
+### System Requirements: HPC Cluster Setup (Recommended)
+
+We provide a convenience setup script for HPC clusters that automatically handles the module loading and virtual environment creation. You can find it in the [`helperscripts/setup_venv.sh`](./helperscripts/setup_venv.sh) file.
+
+**Quick Setup (Recommended):**
+```bash
+# Install latest versions of both packages
+./helperscripts/setup_venv.sh /path/to/venv/folder
+
+# Install specific ada-verona version, latest auto-verify
+./helperscripts/setup_venv.sh /path/to/venv/folder 0.1.1
+
+# Install specific versions of both packages
+./helperscripts/setup_venv.sh /path/to/venv/folder 0.1.1 0.1.4
+```
+
+**Manual Setup:**
+If you prefer to set up manually, the following module versions have been tested and ensure successful installation and compatibility:
+
+### Step-by-Step Installation Guide
+
+#### 1. Environment Setup
+
+**For HPC Systems:**
+```bash
+# Load required modules
+module load GCC/11.3.0
+module load CUDA/12.3.0
+module load cuDNN/8.9.7.29-CUDA-12.3.0
+module load Python/3.10.4
+```
+
+#### 2. Create Virtual Environment
+
+```bash
+# Create a new virtual environment
+python -m venv venv_robustness_experiments
+
+# Activate the virtual environment
+source venv_robustness_experiments/bin/activate
+
+# Update pip (recommended)
+uv pip install --upgrade pip
+```
+
+#### 3. Install ada-verona
+
+Choose one of the following installation options:
 
 ```bash
 # Default installation (includes GPU support and AutoAttack) using uv for faster installation (recommended)
@@ -87,6 +139,26 @@ pip install "ada-verona[dev]"
 
 > **Note:** When installing with extras (like `[cpu]` or `[dev]`), quotes are required around the package name to prevent shell expansion of the square brackets.
 
+#### 4. Optional: Install Plugins
+
+For formal verification capabilities, you can optionally install the auto-verify plugin:
+
+```bash
+# Install auto-verify
+puv ip install auto-verify
+
+# View the current auto-verify configuration
+auto-verify config show
+
+# Configure environment (optional, but recommended)
+auto-verify config set-env venv  # Use Python venv + uv (recommended)
+# or
+auto-verify config set-env conda  # Use conda (traditional)
+
+# Install verifiers
+auto-verify install nnenum abcrown
+```
+
 ### Installation Variants Explained
 
 | Variant | Description | Best For |
@@ -94,8 +166,6 @@ pip install "ada-verona[dev]"
 | `ada-verona` | Full installation with GPU support and AutoAttack | Most users, recommended default |
 | `ada-verona[cpu]` | CPU-only version with minimal dependencies | Basic usage, restricted environments |
 | `ada-verona[dev]` | Full installation plus development tools | Contributors, developers |
-
-This package was tested only on Python version 3.10 and we cannot guarantee it working on any other Python version.
 
 ## Documentation
 In case you have more questions, please refer to the [VERONA documentation](https://deepwiki.com/ADA-research/VERONA).
@@ -243,7 +313,7 @@ ada-verona run --networks ./models --dataset cifar10 --sample-size 20 --sample-c
 
 ### Auto-Verify Plugin System
 
-Ada-verona features a plugin architecture that allows seamless integration with [auto-verify](https://github.com/ADA-research/auto-verify) when it's available. This design provides several benefits:
+Ada-verona features a plugin architecture that allows seamless integration with [auto-verify](https://github.com/ADA-research/auto-verify) when it's installed in the same environment. This design provides several benefits:
 
 1. **Independence**: Ada-verona works perfectly without auto-verify, using attack-based verification methods for empirical upper bounds.
 2. **Automatic Detection**: When auto-verify is installed in the same environment, its verifiers become automatically available

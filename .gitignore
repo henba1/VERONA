@@ -3,7 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 dist/
-helperscripts/
+helperscripts/upload*
+helperscripts/dev*
 build/
 *.egg-info/
 *.egg
