@@ -243,7 +243,7 @@ ada-verona list --verifiers
 # List auto-verify status and available verifiers
 ada-verona list --auto-verify
 
-# List auto-verify virtual environments
+# List auto-verify virtual environments incl. their Github commit hash
 ada-verona list --auto-verify-venvs
 ``
 ```
