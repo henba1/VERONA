@@ -1,7 +1,7 @@
-# This workflow uploads a Python Package to Test PyPI and GitHub Packages when a test release is created
+# This workflow uploads a Python Package to Test PyPI when a test release is created
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
 
-name: Release to Test PyPI and GitHub Packages
+name: Release to Test PyPI
 
 on:
   release:
@@ -65,31 +65,3 @@ jobs:
           # Specify Test PyPI repository
           repository-url: https://test.pypi.org/legacy/
 
-  github-packages-publish:
-    runs-on: ubuntu-latest
-    needs:
-      - release-build
-    # Only run if the build job ran (i.e., alpha release)
-    if: contains(github.event.release.tag_name, 'alpha')
-    permissions:
-      contents: read
-      packages: write  
-
-    steps:
-      - name: Retrieve release distributions
-        uses: actions/download-artifact@v4
-        with:
-          name: release-dists
-          path: dist/
-
-      - name: Publish to GitHub Packages
-      
-        # GitHub Packages for Python uses the GitHub API endpoint
-        # The package will be available at: https://github.com/henba1/VERONA/packages
-        run: |
-          python -m pip install twine==6.0.1
-          twine upload --repository-url https://api.github.com/repos/henba1/VERONA/packages/pypi dist/*
-        env:
-          TWINE_USERNAME: ${{ github.actor }}
-          TWINE_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-          TWINE_REPOSITORY_URL: https://api.github.com/repos/henba1/VERONA/packages/pypi
