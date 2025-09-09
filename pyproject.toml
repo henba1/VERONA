@@ -238,6 +238,9 @@ include-package-data = true
 [tool.setuptools.package-data]
 ada_verona = ["**/*"]
 
+[tool.setuptools.package-dir]
+"" = "."
+
 [tool.pytest.ini_options]
 pythonpath = [
     "."

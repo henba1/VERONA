@@ -14,6 +14,13 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 
+# Default logging levels
+logging.getLogger("matplotlib").setLevel(logging.WARNING)
+logging.getLogger("onnx2torch").setLevel(logging.WARNING)
+logging.getLogger("onnx").setLevel(logging.WARNING)
+logging.getLogger("torch").setLevel(logging.WARNING)
+logging.getLogger("torchvision").setLevel(logging.WARNING)
+
 import ada_verona
 from ada_verona.robustness_experiment_box.database.dataset.image_file_dataset import ImageFileDataset
 from ada_verona.robustness_experiment_box.database.dataset.pytorch_experiment_dataset import PytorchExperimentDataset
