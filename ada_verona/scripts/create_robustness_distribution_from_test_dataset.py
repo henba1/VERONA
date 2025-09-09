@@ -6,13 +6,7 @@ Supports abcrown, verinet, nnenum, and ovalbab verifiers.
 
 import argparse
 import logging
-import sys
 from pathlib import Path
-
-
-script_dir = Path(__file__).parent
-verona_root = script_dir.parent.parent  
-sys.path.insert(0, str(verona_root))
 
 import ada_verona
 from ada_verona.robustness_experiment_box.database.dataset.image_file_dataset import ImageFileDataset
@@ -117,7 +111,8 @@ def validate_verifier_availability(verifier_name):
 
     if verifier_name not in ada_verona.AUTO_VERIFY_VERIFIERS:
         raise RuntimeError(
-            f"{verifier_name.title()} verifier is not available. Available verifiers: {ada_verona.AUTO_VERIFY_VERIFIERS}"
+            f"{verifier_name.title()} verifier is not available. "
+            f"Available verifiers: {ada_verona.AUTO_VERIFY_VERIFIERS}"
         )
 
 
